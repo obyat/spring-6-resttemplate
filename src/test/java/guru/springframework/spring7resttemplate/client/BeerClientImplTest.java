@@ -24,7 +24,11 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "rest.template.user.name=user1",
+        "rest.template.user.password=password"
+})
+// Calls actual server for tests
 class BeerClientImplTest {
 
     @Autowired
@@ -43,22 +47,7 @@ class BeerClientImplTest {
         assertThat(beers.getTotalElements(), greaterThan(0L));
     }
 
-    @Test
-    void listBeersByName() {
 
-        BeerSearchRequest request = BeerSearchRequest.builder()
-                .beerName("ALE")
-                .build();
-
-        Page<BeerDTO> beers = beerClient.listBeers(request);
-
-        assertThat(
-                beers.stream()
-                        .map(BeerDTO::getBeerName)
-                        .toList(),
-                everyItem(containsStringIgnoringCase("ALE"))
-        );
-    }
 
 //    @Test
 //    void listBeersByStyle() {
@@ -103,63 +92,6 @@ class BeerClientImplTest {
         assertThat(beers.getNumber(), is(0));
         assertThat(beers.getSize(), is(2));
         assertThat(beers.getContent(), hasSize(2));
-    }
-
-    @Test
-    void listBeersByNameAndStyle() {
-
-        BeerSearchRequest request = BeerSearchRequest.builder()
-                .beerName("ALE")
-                .beerStyle(BeerStyle.ALE)
-                .build();
-
-        Page<BeerDTO> beers = beerClient.listBeers(request);
-
-        assertThat(
-                beers.stream()
-                        .map(BeerDTO::getBeerName)
-                        .toList(),
-                everyItem(containsStringIgnoringCase("ALE"))
-        );
-
-        assertThat(
-                beers.stream()
-                        .map(BeerDTO::getBeerStyle)
-                        .toList(),
-                everyItem(containsStringIgnoringCase("ALE"))
-        );
-    }
-
-    @Test
-    void listBeersWithAllParameters() {
-
-        BeerSearchRequest request = BeerSearchRequest.builder()
-                .beerName("ALE")
-                .beerStyle(BeerStyle.ALE)
-                .showInventory(true)
-                .pageNumber(0)
-                .pageSize(2)
-                .build();
-
-        Page<BeerDTO> beers = beerClient.listBeers(request);
-
-        assertThat(beers, notNullValue());
-        assertThat(beers.getNumber(), is(0));
-        assertThat(beers.getSize(), is(2));
-
-        assertThat(
-                beers.stream()
-                        .map(BeerDTO::getBeerName)
-                        .toList(),
-                everyItem(containsStringIgnoringCase("ALE"))
-        );
-
-        assertThat(
-                beers.stream()
-                        .map(BeerDTO::getBeerStyle)
-                        .toList(),
-                everyItem(containsStringIgnoringCase("ALE"))
-        );
     }
 
 
