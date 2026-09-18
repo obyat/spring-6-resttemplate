@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest(properties = {
-        "rest.template.user.name=user1",
+        "rest.template.user.name=user2",
         "rest.template.user.password=password"
 })
 // Calls actual server for tests
